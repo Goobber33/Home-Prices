@@ -1,0 +1,1 @@
+React Native Project for searching house prices and interest rates in a searched area.
