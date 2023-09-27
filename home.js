@@ -1,16 +1,22 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { PieChart } from 'react-native-chart-kit';
 
 export default function Home() {
   const [location, setLocation] = useState('San Diego');
   const [averageHomePrice, setAverageHomePrice] = useState('N/A');
+  const [homeTypesData, setHomeTypesData] = useState([]);
   const [showResults, setShowResults] = useState(false);
 
   const fetchHomePrices = () => {
     fetch(`http://192.168.1.134:3001/api/home-prices?location=${location}`)
       .then(response => response.json())
       .then(data => {
+        console.log("API Response:", data); // Logging the API response
         setAverageHomePrice(data.average_price || 'N/A');
+        if (data.homeTypes) {
+          setHomeTypesData(data.homeTypes);
+        }
         setShowResults(true);
       })
       .catch(error => {
@@ -20,7 +26,7 @@ export default function Home() {
   };
 
   const handleSearch = () => {
-    setShowResults(false); // Hide previous results while fetching new ones
+    setShowResults(false);
     fetchHomePrices();
   };
 
@@ -41,6 +47,23 @@ export default function Home() {
           <Text>Average Home Price: {averageHomePrice}</Text>
         </View>
       )}
+      {showResults && homeTypesData.length > 0 && (
+        <PieChart
+          data={homeTypesData}
+          width={300}
+          height={220}
+          chartConfig={{
+            backgroundColor: '#ffffff',
+            backgroundGradientFrom: '#ffffff',
+            backgroundGradientTo: '#ffffff',
+            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+          }}
+          accessor="population"
+          backgroundColor="transparent"
+          paddingLeft="15"
+          absolute
+        />
+      )}
     </View>
   );
 }
@@ -49,12 +72,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     backgroundColor: '#f4f4f4',
-    padding: 16,
+    paddingTop: 40,
+    paddingHorizontal: 16,
   },
   title: {
-    fontSize: 24,
+    fontSize: 22,
     marginBottom: 24,
     fontWeight: '700',
     color: '#333',
@@ -74,17 +98,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 50,
     marginBottom: 16,
   },
-  locationBox: {
-    marginTop: 16,
-    marginBottom: 24,
-    padding: 16,
-    borderRadius: 6,
-    backgroundColor: '#007aff',
-  },
-  locationText: {
-    color: '#fff',
-    fontWeight: '600',
-  },
   infoCard: {
     padding: 20,
     borderRadius: 6,
@@ -97,10 +110,5 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 5,
     elevation: 5,
-  },
-  infoText: {
-    marginBottom: 8,
-    fontSize: 16,
-    fontWeight: '600',
   },
 });

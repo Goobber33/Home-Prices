@@ -28,25 +28,45 @@ app.get('/api/home-prices', async (req, res) => {
   try {
     const response = await axios.request(options);
     console.log('API returned:', response.data);
+    console.log('Pretty printed API data:', JSON.stringify(response.data, null, 2));
   
     // Calculate the average home price
     const results = response.data.home_search.results;
     let total_price = 0;
     let count = 0;
-  
+    const homeTypesCount = {}; // Object to hold counts of each home type
+    
     for (let i = 0; i < results.length; i++) {
-      if (results[i].list_price) { // Make sure the list_price exists
+      if (results[i].list_price) {
         total_price += results[i].list_price;
         count++;
       }
+  
+      // Counting home types
+      const type = results[i].description ? results[i].description.type : 'Unknown';
+      if (!homeTypesCount[type]) {
+        homeTypesCount[type] = 1;
+      } else {
+        homeTypesCount[type]++;
+      }
     }
-  
+    
     const average_price = total_price / count;
-    console.log('Average Home Price:', average_price);
   
-    // Send the API response along with average home price to client
-
-    res.json({ api_data: response.data, average_price });
+    // Convert homeTypesCount to an array suitable for Pie Chart
+    const homeTypesArray = Object.keys(homeTypesCount).map(type => {
+      return {
+        name: type,
+        population: homeTypesCount[type],
+        color: '#' + ((Math.random() * 0xffffff) << 0).toString(16),
+        legendFontColor: '#7F7F7F',
+        legendFontSize: 12
+      };
+    });
+  
+    console.log('Average Home Price:', average_price);
+    
+    res.json({ api_data: response.data, average_price, homeTypes: homeTypesArray });
   
   } catch (error) {
     console.error('API Error:', error);
