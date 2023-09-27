@@ -9,8 +9,8 @@ const port = 3001;
 app.use(cors());
 
 app.get('/api/home-prices', async (req, res) => {
-  const location = req.query.location || 'santa monica'; // You can change the default location
-  const type = 'single_family,condos'; // Customize as needed
+  const location = req.query.location || 'santa monica';
+  const type = 'single_family,condos';
 
   const options = {
     method: 'GET',
@@ -45,6 +45,7 @@ app.get('/api/home-prices', async (req, res) => {
     console.log('Average Home Price:', average_price);
   
     // Send the API response along with average home price to client
+
     res.json({ api_data: response.data, average_price });
   
   } catch (error) {
@@ -53,7 +54,6 @@ app.get('/api/home-prices', async (req, res) => {
   }
 });
 
-// Change this line to allow access from devices on the same network
 app.listen(port, '0.0.0.0', () => {
   console.log(`Server running on http://0.0.0.0:${port}`);
 });

@@ -11,11 +11,11 @@ export default function Home() {
       .then(response => response.json())
       .then(data => {
         setAverageHomePrice(data.average_price || 'N/A');
-        setShowResults(true); // Show the results
+        setShowResults(true);
       })
       .catch(error => {
         console.error('Error fetching data:', error);
-        setShowResults(false); // Hide the results if there is an error
+        setShowResults(false);
       });
   };
 
@@ -39,7 +39,6 @@ export default function Home() {
       {showResults && (
         <View style={styles.infoCard}>
           <Text>Average Home Price: {averageHomePrice}</Text>
-          {/* You can add interest rate info here if needed */}
         </View>
       )}
     </View>
