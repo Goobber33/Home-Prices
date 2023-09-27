@@ -44,25 +44,26 @@ export default function Home() {
       </View>
       {showResults && (
         <View style={styles.infoCard}>
-          <Text>Average Home Price: {averageHomePrice}</Text>
+          <Text>Average Home Price: {Number(averageHomePrice).toLocaleString("en-US", {style: "currency", currency: "USD"})}</Text>
         </View>
       )}
       {showResults && homeTypesData.length > 0 && (
         <PieChart
-          data={homeTypesData}
-          width={300}
-          height={220}
-          chartConfig={{
-            backgroundColor: '#ffffff',
-            backgroundGradientFrom: '#ffffff',
-            backgroundGradientTo: '#ffffff',
-            color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
-          }}
-          accessor="population"
-          backgroundColor="transparent"
-          paddingLeft="15"
-          absolute
-        />
+        data={homeTypesData}
+        width={300}
+        height={220}
+        chartConfig={{
+          backgroundColor: '#ffffff',
+          backgroundGradientFrom: '#ffffff',
+          backgroundGradientTo: '#ffffff',
+          color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+        }}
+        accessor="population"
+        backgroundColor="transparent"
+        paddingLeft="15"
+        absolute
+        hasAnimation={true}  // Add this line
+      />      
       )}
     </View>
   );
