@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Image, Platform } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Image, Platform, TouchableOpacity } from 'react-native';
 import { PieChart } from 'react-native-chart-kit';
 
 export default function Home() {
@@ -42,7 +42,10 @@ export default function Home() {
         value={location}
       />
       <View style={styles.buttonContainer}>
-        <Button title="Search" color="#1a1a2e" onPress={handleSearch} />
+      <TouchableOpacity style={styles.bootstrapButton} onPress={handleSearch}>
+  <Text style={styles.buttonText}>Search</Text>
+</TouchableOpacity>
+
       </View>
       {showResults && (
         <View style={styles.infoCard}>
@@ -113,6 +116,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 20,
     marginBottom: 16,
+    alignItems: 'center',
   },
   infoCard: {
     padding: 20,
@@ -128,4 +132,25 @@ const styles = StyleSheet.create({
     elevation: 5,
     marginBottom: 20,
   },
+  bootstrapButton: {
+    backgroundColor: '#007bff',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    width: '50%',
+  },
+  buttonText: {
+    color: '#ffffff',
+    fontWeight: 'bold',
+  },
+  
 });
